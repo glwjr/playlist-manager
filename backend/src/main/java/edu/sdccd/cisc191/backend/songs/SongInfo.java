@@ -9,5 +9,7 @@ public interface SongInfo {
 
     String getArtist();
 
+    String getGenre();
+
     Instant getCreatedAt();
 }

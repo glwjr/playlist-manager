@@ -6,26 +6,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.time.Instant;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/songs")
 public class SongController {
-    private final SongRepository songRepository;
+    private final SongService songService;
 
-    SongController(SongRepository songRepository) {
-        this.songRepository = songRepository;
+    public SongController(SongService songService) {
+        this.songService = songService;
     }
 
     @GetMapping
     List<SongInfo> getSongs() {
-        return songRepository.findAllByOrderByCreatedAtDesc();
+        return songService.getAllSongs();
     }
 
     @GetMapping("/{id}")
     ResponseEntity<SongInfo> getSongById(@PathVariable Long id) {
-        var song = songRepository.findSongById(id).orElseThrow(() -> new SongNotFoundException("Song not found"));
+        var song = songService.getSongById(id);
         return ResponseEntity.ok(song);
     }
 
@@ -36,13 +35,8 @@ public class SongController {
             String artist) {}
 
     @PostMapping
-    ResponseEntity<Void> createSong(
-            @Valid @RequestBody CreateSongPayload payload) {
-        var song = new Song();
-        song.setTitle(payload.title);
-        song.setArtist(payload.artist);
-        song.setCreatedAt(Instant.now());
-        var savedSong = songRepository.save(song);
+    ResponseEntity<Void> createSong(@Valid @RequestBody CreateSongPayload payload) {
+        var savedSong = songService.createSong(payload.title(), payload.artist());
         var url = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .build(savedSong.getId());
@@ -59,11 +53,7 @@ public class SongController {
     ResponseEntity<Void> updateSong(
             @PathVariable Long id,
             @Valid @RequestBody UpdateSongPayload payload) {
-        var song = songRepository.findById(id).orElseThrow(() -> new SongNotFoundException("Song not found"));
-        song.setTitle(payload.title);
-        song.setArtist(payload.artist);
-        song.setUpdatedAt(Instant.now());
-        songRepository.save(song);
+        songService.updateSong(id, payload.title(), payload.artist());
         return ResponseEntity.noContent().build();
     }
 

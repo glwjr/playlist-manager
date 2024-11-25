@@ -26,6 +26,10 @@ public class Song {
     private String artist;
 
     @NotNull
+    @Column(name = "genre", nullable = false)
+    private String genre;
+
+    @NotNull
     @ColumnDefault("now()")
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
