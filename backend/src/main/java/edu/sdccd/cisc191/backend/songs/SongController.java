@@ -49,6 +49,24 @@ public class SongController {
         return ResponseEntity.created(url).build();
     }
 
+    record UpdateSongPayload(
+            @NotEmpty(message = "Title is required")
+            String title,
+            @NotEmpty(message = "Artist is required")
+            String artist) {}
+
+    @PutMapping("/{id}")
+    ResponseEntity<Void> updateSong(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateSongPayload payload) {
+        var song = songRepository.findById(id).orElseThrow(() -> new SongNotFoundException("Song not found"));
+        song.setTitle(payload.title);
+        song.setArtist(payload.artist);
+        song.setUpdatedAt(Instant.now());
+        songRepository.save(song);
+        return ResponseEntity.noContent().build();
+    }
+
     @ExceptionHandler(SongNotFoundException.class)
     ResponseEntity<Void> handle(SongNotFoundException e) {
         return ResponseEntity.notFound().build();
