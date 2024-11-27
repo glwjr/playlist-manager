@@ -1,4 +1,4 @@
-import Song from "../../../../shared/Song";
+import Song from "../../../../common/Song";
 import Button from "@mui/material/Button";
 import AddIcon from '@mui/icons-material/Add';
 

@@ -5,7 +5,7 @@ import java.time.Instant;
 public interface SongInfo {
     Long getId();
 
-    String getTitle();
+    String getName();
 
     String getArtist();
 

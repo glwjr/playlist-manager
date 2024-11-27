@@ -22,20 +22,22 @@ public class SongService {
                 .orElseThrow(() -> new SongNotFoundException("Song not found"));
     }
 
-    public Song createSong(String title, String artist) {
+    public Song createSong(String name, String artist) {
         var song = new Song();
-        song.setTitle(title);
+        song.setName(name);
         song.setArtist(artist);
         song.setCreatedAt(Instant.now());
+
         return songRepository.save(song);
     }
 
-    public void updateSong(Long id, String title, String artist) {
+    public void updateSong(Long id, String name, String artist) {
         var song = songRepository.findById(id)
                 .orElseThrow(() -> new SongNotFoundException("Song not found"));
-        song.setTitle(title);
+        song.setName(name);
         song.setArtist(artist);
         song.setUpdatedAt(Instant.now());
+
         songRepository.save(song);
     }
 }

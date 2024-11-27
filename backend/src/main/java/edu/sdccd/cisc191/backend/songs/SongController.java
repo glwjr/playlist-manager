@@ -30,14 +30,14 @@ public class SongController {
     }
 
     record CreateSongPayload(
-            @NotEmpty(message = "Title is required")
-            String title,
+            @NotEmpty(message = "Name is required")
+            String name,
             @NotEmpty(message = "Artist is required")
             String artist) {}
 
     @PostMapping
     ResponseEntity<Void> createSong(@Valid @RequestBody CreateSongPayload payload) {
-        var savedSong = songService.createSong(payload.title(), payload.artist());
+        var savedSong = songService.createSong(payload.name(), payload.artist());
         var url = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .build(savedSong.getId());
@@ -45,8 +45,8 @@ public class SongController {
     }
 
     record UpdateSongPayload(
-            @NotEmpty(message = "Title is required")
-            String title,
+            @NotEmpty(message = "Name is required")
+            String name,
             @NotEmpty(message = "Artist is required")
             String artist) {}
 
@@ -54,7 +54,7 @@ public class SongController {
     ResponseEntity<Void> updateSong(
             @PathVariable Long id,
             @Valid @RequestBody UpdateSongPayload payload) {
-        songService.updateSong(id, payload.title(), payload.artist());
+        songService.updateSong(id, payload.name(), payload.artist());
         return ResponseEntity.noContent().build();
     }
 
