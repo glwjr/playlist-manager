@@ -1,9 +1,8 @@
-import Playlist from "../../../../common/Playlist";
-import Button from "@mui/material/Button";
-import AddIcon from '@mui/icons-material/Add';
-import Card from "@mui/material/Card";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import PlaylistsTable from "@/components/PlaylistsTable";
 
 async function fetchPlaylists() {
   try {
@@ -16,14 +15,14 @@ async function fetchPlaylists() {
 }
 
 export default async function PlaylistsPage() {
-  const playlists = await fetchPlaylists();
+  // const playlists = await fetchPlaylists();
+  const playlists = [];
 
   return (
-    <div>
-      <Card sx={{ display: "flex", flexDirection: "column", alignSelf: "center", width: "100%", p: 4 }}>
-        <Button variant="contained" startIcon={<AddIcon />}>Add Playlist</Button>
-      </Card>
-      {playlists.map((playlist: Playlist) => <div key={playlist.id}>{playlist.name}</div>)}
-    </div>
+    <Box>
+      <Typography variant="h5">Song Catalog</Typography>
+      <Button variant="contained" component="a" href="/songs/add" startIcon={<AddIcon />} sx={{ my: 2 }}>Add Song</Button>
+      <PlaylistsTable />
+    </Box>
   );
 }

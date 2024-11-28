@@ -1,5 +1,8 @@
-import {Box, Button, Grid2, Typography} from "@mui/material"
 import AddIcon from '@mui/icons-material/Add';
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+
 import SongsTable from "@/components/SongsTable";
 
 async function fetchSongs() {
