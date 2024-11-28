@@ -1,0 +1,10 @@
+INSERT INTO SONG (name, artist, genre) VALUES ('Bohemian Rhapsody', 'Queen', 'Rock');
+INSERT INTO SONG (name, artist, genre) VALUES ('Imagine', 'John Lennon', 'Pop');
+INSERT INTO SONG (name, artist, genre) VALUES ('Hotel California', 'Eagles', 'Rock');
+INSERT INTO SONG (name, artist, genre) VALUES ('Hey Jude', 'The Beatles', 'Pop');
+INSERT INTO SONG (name, artist, genre) VALUES ('Like a Rolling Stone', 'Bob Dylan', 'Rock');
+INSERT INTO SONG (name, artist, genre) VALUES ('Smells Like Teen Spirit', 'Nirvana', 'Rock');
+INSERT INTO SONG (name, artist, genre) VALUES ('Billie Jean', 'Michael Jackson', 'Pop');
+INSERT INTO SONG (name, artist, genre) VALUES ('What a Wonderful World', 'Louis Armstrong', 'Jazz');
+INSERT INTO SONG (name, artist, genre) VALUES ('Stairway to Heaven', 'Led Zeppelin', 'Rock');
+INSERT INTO SONG (name, artist, genre) VALUES ('Let It Be', 'The Beatles', 'Pop');
