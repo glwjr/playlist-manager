@@ -44,4 +44,7 @@ public class SongService {
         songRepository.save(song);
     }
 
+    public void deleteSong(Long id) {
+        songRepository.deleteById(id);
+    }
 }

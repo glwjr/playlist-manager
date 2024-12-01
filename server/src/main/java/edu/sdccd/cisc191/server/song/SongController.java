@@ -20,7 +20,7 @@ public class SongController {
     }
 
     @GetMapping
-    List<SongInfo> getSongs() {
+    List<SongInfo> getAllSongs() {
         return songService.getAllSongs();
     }
 
@@ -29,14 +29,6 @@ public class SongController {
         var song = songService.getSongById(id);
         return ResponseEntity.ok(song);
     }
-
-    record CreateSongPayload(
-            @NotEmpty(message = "Name is required")
-            String name,
-            @NotEmpty(message = "Artist is required")
-            String artist,
-            @NotEmpty(message = "Genre is required")
-            String genre) {}
 
     @PostMapping
     ResponseEntity<Void> createSong(@Valid @RequestBody CreateSongPayload payload) {
@@ -47,14 +39,6 @@ public class SongController {
         return ResponseEntity.created(url).build();
     }
 
-    record UpdateSongPayload(
-            @NotEmpty(message = "Name is required")
-            String name,
-            @NotEmpty(message = "Artist is required")
-            String artist,
-            @NotEmpty(message = "Genre is required")
-            String genre) {}
-
     @PutMapping("/{id}")
     ResponseEntity<Void> updateSong(
             @PathVariable Long id,
@@ -63,9 +47,33 @@ public class SongController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteSong(@PathVariable Long id) {
+        songService.deleteSong(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @ExceptionHandler(SongNotFoundException.class)
     ResponseEntity<Void> handle(SongNotFoundException e) {
         return ResponseEntity.notFound().build();
+    }
+
+    record CreateSongPayload(
+            @NotEmpty(message = "Name is required")
+            String name,
+            @NotEmpty(message = "Artist is required")
+            String artist,
+            @NotEmpty(message = "Genre is required")
+            String genre) {
+    }
+
+    record UpdateSongPayload(
+            @NotEmpty(message = "Name is required")
+            String name,
+            @NotEmpty(message = "Artist is required")
+            String artist,
+            @NotEmpty(message = "Genre is required")
+            String genre) {
     }
 
 }

@@ -75,7 +75,7 @@ public class SongRepositoryTest {
         SongInfo song = songRepository.findSongByName("Song 1")
                 .orElseThrow(() -> new SongNotFoundException("Song 1 not found"));
 
-        assert(song.getArtist().equals("Artist 1"));
+        assert (song.getArtist().equals("Artist 1"));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class SongRepositoryTest {
         // Data seed and initial mocked song adds 11 entries to these initial 2
         assertEquals(13, foundSongs.size());
     }
-    
+
     @Test
     public void testFindAllByName() {
         Song song1 = new Song();
@@ -107,7 +107,7 @@ public class SongRepositoryTest {
         song1.setArtist("Artist 1");
         song1.setGenre("Genre 1");
         song1.setCreatedAt(Instant.now());
-        
+
         Song song2 = new Song();
         song2.setName("Song Name");
         song2.setArtist("Artist 2");
@@ -121,7 +121,7 @@ public class SongRepositoryTest {
         song3.setCreatedAt(Instant.now());
 
         songRepository.saveAll(List.of(song1, song2, song3));
-        
+
         List<SongInfo> foundSongs = songRepository.findAllByName("Song Name");
 
         assertEquals(2, foundSongs.size());
