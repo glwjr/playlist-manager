@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class FallbackController {
+
+    // Defaults to a blank white page on unmapped routes
     @GetMapping("/**")
     public ResponseEntity<String> handleFallback() {
         HttpHeaders headers = new HttpHeaders();
@@ -16,4 +18,5 @@ public class FallbackController {
                 .headers(headers)
                 .body("<html><head></head><body></body></html>");
     }
+
 }

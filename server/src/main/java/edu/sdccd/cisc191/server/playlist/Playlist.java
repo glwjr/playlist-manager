@@ -16,6 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Playlist")
 public class Playlist {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -113,4 +114,5 @@ public class Playlist {
             songs.add(song);
         }
     }
+
 }

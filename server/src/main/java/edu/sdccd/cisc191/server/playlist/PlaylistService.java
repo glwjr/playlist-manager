@@ -7,6 +7,7 @@ import java.util.List;
 
 @Service
 public class PlaylistService {
+
     private final PlaylistRepository playlistRepository;
 
     public PlaylistService(PlaylistRepository playlistRepository) {
@@ -70,4 +71,5 @@ public class PlaylistService {
 
         return playlistRepository.save(playlist);
     }
+
 }

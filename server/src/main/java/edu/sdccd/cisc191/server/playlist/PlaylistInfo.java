@@ -3,6 +3,7 @@ package edu.sdccd.cisc191.server.playlist;
 import java.time.Instant;
 
 public interface PlaylistInfo {
+
     Long getId();
 
     String getName();
@@ -10,4 +11,5 @@ public interface PlaylistInfo {
     String[][] getSongs();
 
     Instant getCreatedAt();
+
 }

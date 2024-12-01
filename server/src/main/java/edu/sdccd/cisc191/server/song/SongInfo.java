@@ -12,4 +12,5 @@ public interface SongInfo {
     String getGenre();
 
     Instant getCreatedAt();
+
 }

@@ -12,6 +12,7 @@ import java.util.List;
 @RequestMapping("/api/playlists")
 @CrossOrigin(origins = "http://localhost:3000")
 public class PlaylistController {
+
     private final PlaylistService playlistService;
 
     public PlaylistController(PlaylistService playlistService) {
@@ -41,4 +42,5 @@ public class PlaylistController {
                 .build(savedPlaylist.getId());
         return ResponseEntity.created(url).build();
     }
+
 }
