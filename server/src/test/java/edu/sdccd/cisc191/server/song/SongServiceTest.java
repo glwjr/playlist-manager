@@ -38,16 +38,23 @@ public class SongServiceTest {
 
     @AfterEach
     public void tearDown() {
-        songRepository.delete(song);
+        songRepository.deleteAll();
     }
 
     @Test
     public void testGetAll() {
+        Song newSong = new Song();
+        newSong.setName("Song 2");
+        newSong.setArtist("Artist 2");
+        newSong.setGenre("Genre 2");
+        newSong.setCreatedAt(Instant.now());
+
+        songRepository.save(newSong);
+
         List<SongInfo> songs = songService.getAllSongs();
 
         assert songs != null;
-        // Database is already seeded with 10 songs
-        assertEquals(11, songs.size());
+        assertEquals(2, songs.size());
     }
 
     @Test

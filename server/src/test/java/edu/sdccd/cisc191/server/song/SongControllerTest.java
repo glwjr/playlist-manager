@@ -1,6 +1,8 @@
 package edu.sdccd.cisc191.server.song;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,7 +27,12 @@ public class SongControllerTest {
     private SongService songService;
 
     @Autowired
+    private SongRepository songRepository;
+
+    @Autowired
     private MockMvc mockMvc;
+
+    private Song song;
 
     public static String asJsonString(final Object obj) {
         try {
@@ -35,15 +42,28 @@ public class SongControllerTest {
         }
     }
 
+    @BeforeEach
+    public void setUp() {
+        song = songService.createSong("Test Song", "Test Artist", "Test Genre");
+    }
+
+    @AfterEach
+    public void tearDown() {
+        songRepository.deleteAll();
+    }
+
     @Test
     public void testGetAllSongs() throws Exception {
+        songService.createSong("Test Song 2", "Test Artist 2", "Test Genre 2");
+        songService.createSong("Test Song 3", "Test Artist 3", "Test Genre 3");
+
         List<SongInfo> baseSongs = songService.getAllSongs();
 
         mockMvc.perform(get("/api/songs"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(baseSongs.get(0).getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(10));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3));
     }
 
     @Test
@@ -76,7 +96,7 @@ public class SongControllerTest {
                 .UpdateSongPayload("Updated Song Name", "Updated Artist Name", "Updated Genre Name");
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/api/songs/{id}", 1)
+                        .put("/api/songs/{id}", song.getId())
                         .content(asJsonString(payload))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());

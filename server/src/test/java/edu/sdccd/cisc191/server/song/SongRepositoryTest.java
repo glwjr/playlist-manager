@@ -36,7 +36,7 @@ public class SongRepositoryTest {
 
     @AfterEach
     public void tearDown() {
-        songRepository.delete(song);
+        songRepository.deleteAll();
     }
 
     @Test
@@ -96,8 +96,7 @@ public class SongRepositoryTest {
 
         List<Song> foundSongs = songRepository.findAll();
 
-        // Data seed and initial mocked song adds 11 entries to these initial 2
-        assertEquals(13, foundSongs.size());
+        assertEquals(3, foundSongs.size());
     }
 
     @Test
