@@ -129,8 +129,7 @@ public class PlaylistServiceTest {
 
         songRepository.save(secondSong);
 
-        playlist.addSong(song);
-        playlist.addSong(secondSong);
+        playlist.getSongs().addAll(List.of(song, secondSong));
 
         Playlist updatedPlaylist = playlistRepository.save(playlist);
 
@@ -158,6 +157,33 @@ public class PlaylistServiceTest {
 
         assert updatedPlaylist.isPresent();
         assertEquals(0, updatedPlaylist.get().getSongs().size());
+    }
+
+    @Test
+    public void testFilterAndSortSongsByGenre() {
+        Song secondSong = new Song();
+        secondSong.setName("B - Test Song 2");
+        secondSong.setArtist("Test Artist 2");
+        secondSong.setGenre("Rock");
+        secondSong.setCreatedAt(Instant.now());
+
+        Song thirdSong = new Song();
+        thirdSong.setName("A - Test Song 3");
+        thirdSong.setArtist("Test Artist 3");
+        thirdSong.setGenre("Rock");
+        thirdSong.setCreatedAt(Instant.now());
+
+        songRepository.saveAll(List.of(secondSong, thirdSong));
+
+        playlist.getSongs().addAll(List.of(song, secondSong, thirdSong));
+
+        playlistRepository.save(playlist);
+
+        List<Song> result = playlistService.filterAndSortSongsByGenre(playlist.getId(), "Rock");
+
+        assertEquals(2, result.size());
+        assertEquals(thirdSong.getId(), result.get(0).getId());
+        assertEquals(secondSong.getId(), result.get(1).getId());
     }
 
 }

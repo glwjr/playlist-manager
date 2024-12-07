@@ -174,7 +174,7 @@ public class PlaylistControllerTest {
         Song savedSong = songRepository.save(song);
 
         playlist.addSong(savedSong);
-        
+
         playlistRepository.save(playlist);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -185,5 +185,38 @@ public class PlaylistControllerTest {
         assertFalse(updatedPlaylist.getSongs().contains(savedSong));
     }
 
+    @Test
+    public void testSortAndFilterSongsByGenre() throws Exception {
+        Song firstSong = new Song();
+        firstSong.setName("C");
+        firstSong.setArtist("Test Artist 1");
+        firstSong.setGenre("Pop");
+        firstSong.setCreatedAt(Instant.now());
+
+        Song secondSong = new Song();
+        secondSong.setName("B");
+        secondSong.setArtist("Test Artist 2");
+        secondSong.setGenre("Rock");
+        secondSong.setCreatedAt(Instant.now());
+
+        Song thirdSong = new Song();
+        thirdSong.setName("A");
+        thirdSong.setArtist("Test Artist 3");
+        thirdSong.setGenre("Rock");
+        thirdSong.setCreatedAt(Instant.now());
+
+        songRepository.saveAll(List.of(firstSong, secondSong, thirdSong));
+
+        playlist.getSongs().addAll(List.of(firstSong, secondSong, thirdSong));
+
+        playlistRepository.save(playlist);
+
+        mockMvc.perform(get("/api/playlists/{id}/songs/{genre}", playlist.getId(), "ROCK"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(thirdSong.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(secondSong.getId()));
+    }
 
 }

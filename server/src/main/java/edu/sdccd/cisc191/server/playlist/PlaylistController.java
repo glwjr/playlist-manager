@@ -76,6 +76,12 @@ public class PlaylistController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}/songs/{genre}")
+    ResponseEntity<List<Song>> filterAndSortSongsByGenre(@PathVariable Long id, @PathVariable String genre) {
+        List<Song> filteredSongs = playlistService.filterAndSortSongsByGenre(id, genre);
+        return ResponseEntity.ok(filteredSongs);
+    }
+
     @ExceptionHandler(PlaylistNotFoundException.class)
     ResponseEntity<Void> handle(PlaylistNotFoundException e) {
         return ResponseEntity.notFound().build();

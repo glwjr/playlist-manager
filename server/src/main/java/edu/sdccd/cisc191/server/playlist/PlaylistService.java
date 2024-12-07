@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PlaylistService {
@@ -80,6 +81,16 @@ public class PlaylistService {
         playlist.deleteSong(song.getId());
 
         playlistRepository.save(playlist);
+    }
+
+    public List<Song> filterAndSortSongsByGenre(Long playlistId, String genre) {
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new PlaylistNotFoundException("Playlist not found"));
+
+        return playlist.getSongs().stream()
+                .filter(song -> song.getGenre().equalsIgnoreCase(genre))
+                .sorted((song1, song2) -> song1.getName().compareToIgnoreCase(song2.getName()))
+                .collect(Collectors.toList());
     }
 
 }
