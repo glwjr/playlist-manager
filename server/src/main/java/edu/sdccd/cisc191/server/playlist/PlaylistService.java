@@ -1,17 +1,24 @@
 package edu.sdccd.cisc191.server.playlist;
 
+import edu.sdccd.cisc191.server.song.Song;
+import edu.sdccd.cisc191.server.song.SongNotFoundException;
+import edu.sdccd.cisc191.server.song.SongRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PlaylistService {
 
     private final PlaylistRepository playlistRepository;
 
-    public PlaylistService(PlaylistRepository playlistRepository) {
+    private final SongRepository songRepository;
+
+    public PlaylistService(PlaylistRepository playlistRepository, SongRepository songRepository) {
         this.playlistRepository = playlistRepository;
+        this.songRepository = songRepository;
     }
 
     public List<PlaylistInfo> getAllPlaylists() {
@@ -47,29 +54,32 @@ public class PlaylistService {
         playlistRepository.deleteById(id);
     }
 
-    public void addSongToPlaylistArray(Long playlistId, int row, String name, String artist, String genre) {
-        var playlist = playlistRepository.findById(playlistId)
+    public Set<Song> getSongs(Long playlistId) {
+        PlaylistInfo playlist = playlistRepository.findPlaylistById(playlistId)
                 .orElseThrow(() -> new PlaylistNotFoundException("Playlist not found"));
-        playlist.addSongToArray(row, name, artist, genre);
+        return playlist.getSongs();
     }
 
-    public Playlist persistSongFromPlaylistArray(Long playlistId, int row) {
+    public Playlist addSongToPlaylist(Long playlistId, Long songId) {
         var playlist = playlistRepository.findById(playlistId)
                 .orElseThrow(() -> new PlaylistNotFoundException("Playlist not found"));
-        playlist.persistSongFromArray(row);
+        var song = songRepository.findById(songId)
+                .orElseThrow(() -> new SongNotFoundException("Song not found"));
+
+        playlist.addSong(song);
 
         return playlistRepository.save(playlist);
     }
 
-    public Playlist persistAllSongsFromPlaylistArray(Long playlistId) {
-        Playlist playlist = playlistRepository.findById(playlistId)
-                .orElseThrow(() -> new RuntimeException("Playlist not found"));
+    public void deleteSongFromPlaylist(Long playlistId, Long songId) {
+        var playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new PlaylistNotFoundException("Playlist not found"));
+        var song = songRepository.findById(songId)
+                .orElseThrow(() -> new SongNotFoundException("Song not found"));
 
-        for (int i = 0; i < playlist.getSongsArray().length; i++) {
-            playlist.persistSongFromArray(i);
-        }
+        playlist.deleteSong(song.getId());
 
-        return playlistRepository.save(playlist);
+        playlistRepository.save(playlist);
     }
 
 }

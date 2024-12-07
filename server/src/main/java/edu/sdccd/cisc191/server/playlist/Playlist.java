@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -16,6 +17,17 @@ import java.util.Set;
 @Entity
 @Table(name = "Playlist")
 public class Playlist {
+
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
+    @JoinTable(
+            name = "Playlist_Song",
+            joinColumns = {@JoinColumn(name = "playlist_id")},
+            inverseJoinColumns = {@JoinColumn(name = "song_id")}
+    )
+    Set<Song> songs = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,85 +46,37 @@ public class Playlist {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "Playlist_Song",
-            joinColumns = { @JoinColumn(name = "playlist_id") },
-            inverseJoinColumns = { @JoinColumn(name = "song_id") }
-    )
-    Set<Song> songs = new HashSet<>();
-
     @Transient
     private String[][] songsArray = new String[10][3];
 
-    public int[] findIndexOfSong(String value) {
-        for (int row = 0; row < songsArray.length; row++) {
-            for (int col = 0; col < songsArray[row].length; col++) {
-                if (songsArray[row][col] != null && songsArray[row][col].equals(value)) {
-                    return new int[]{row, col};
-                }
-            }
-        }
-        return null;
+    public Playlist() {
+        syncSongsArrayWithSongsSet();
     }
 
-    public void addSongToArray(int row, String name, String artist, String genre) {
-        if (row >= songsArray.length) {
-            expandSongsArray();
-        }
-        songsArray[row][0] = name;
-        songsArray[row][1] = artist;
-        songsArray[row][2] = genre;
-    }
-
-    public void expandSongsArray() {
-        String[][] newSongsArray = new String[songsArray.length + 1][3];
-        System.arraycopy(songsArray, 0, newSongsArray, 0, songsArray.length);
-        this.songsArray = newSongsArray;
-    }
-
-    public void deleteSongAtIndex(int row, int col) {
-        if (row >= 0 && row < songsArray.length && col >= 0 && col < songsArray[row].length) {
-            songsArray[row][col] = null;
+    private void syncSongsArrayWithSongsSet() {
+        songsArray = new String[songs.size()][3];
+        int i = 0;
+        for (Song song : songs) {
+            songsArray[i++] = new String[]{song.getName(), song.getArtist(), song.getGenre()};
         }
     }
 
-    public void deleteRowAtIndex(int row) {
-        if (row >= 0 && row < songsArray.length) {
-            for (int col = 0; col < songsArray[row].length; col++) {
-                songsArray[row][col] = null;
-            }
+    public void addSong(Song song) {
+        if (songs.add(song)) {
+            syncSongsArrayWithSongsSet();
         }
     }
 
-    public String[][] printAllSongs() {
-        int validRowCount = 0;
-        for (String[] row : songsArray) {
-            if (row != null && row[0] != null) {
-                validRowCount++;
-            }
+    public void deleteSong(Long songId) {
+        boolean removed = songs.removeIf(song -> Objects.equals(song.getId(), songId));
+
+        if (removed) {
+            syncSongsArrayWithSongsSet();
         }
-
-        String[][] validRows = new String[validRowCount][songsArray[0].length];
-        int index = 0;
-
-        for (String[] row : songsArray) {
-            if (row != null && row[0] != null) {
-                validRows[index++] = row;
-            }
-        }
-
-        return validRows;
     }
 
-    public void persistSongFromArray(int row) {
-        if (row < songsArray.length && songsArray[row][0] != null) {
-            Song song = new Song();
-            song.setName(songsArray[row][0]);
-            song.setArtist(songsArray[row][1]);
-            song.setGenre(songsArray[row][2]);
-            songs.add(song);
-        }
+    public String[][] getSongsArray() {
+        return songsArray.clone();
     }
 
 }

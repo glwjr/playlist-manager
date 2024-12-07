@@ -10,6 +10,7 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Long> {
     List<PlaylistInfo> findAllByOrderByCreatedAtDesc();
 
     Optional<PlaylistInfo> findPlaylistById(Long id);
+
     Optional<PlaylistInfo> findPlaylistByName(String name);
 
 }

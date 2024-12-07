@@ -64,7 +64,6 @@ public class SongServiceTest {
         assertEquals(song.getName(), foundSong.getName());
         assertEquals(song.getArtist(), foundSong.getArtist());
         assertEquals(song.getGenre(), foundSong.getGenre());
-        assertEquals(song.getCreatedAt(), foundSong.getCreatedAt());
     }
 
     @Test

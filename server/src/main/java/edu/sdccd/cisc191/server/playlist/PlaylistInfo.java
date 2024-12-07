@@ -1,6 +1,8 @@
 package edu.sdccd.cisc191.server.playlist;
 
-import java.time.Instant;
+import edu.sdccd.cisc191.server.song.Song;
+
+import java.util.Set;
 
 public interface PlaylistInfo {
 
@@ -8,8 +10,6 @@ public interface PlaylistInfo {
 
     String getName();
 
-    String[][] getSongs();
-
-    Instant getCreatedAt();
+    Set<Song> getSongs();
 
 }
