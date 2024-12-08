@@ -101,5 +101,4 @@ public class PlaylistController {
             @NotNull(message = "Song ID is required")
             Long songId) {
     }
-
 }

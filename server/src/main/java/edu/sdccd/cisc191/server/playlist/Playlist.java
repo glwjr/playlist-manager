@@ -78,5 +78,4 @@ public class Playlist {
     public String[][] getSongsArray() {
         return songsArray.clone();
     }
-
 }

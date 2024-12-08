@@ -185,5 +185,4 @@ public class PlaylistServiceTest {
         assertEquals(thirdSong.getId(), result.get(0).getId());
         assertEquals(secondSong.getId(), result.get(1).getId());
     }
-
 }

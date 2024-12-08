@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class FallbackController {
-    
+
     @RequestMapping("/**")
     public ResponseEntity<String> handleFallback() {
         String blankPage = "<html><head></head><body></body></html>";
@@ -14,5 +14,4 @@ public class FallbackController {
                 .header("Content-Type", "text/html; charset=UTF-8")
                 .body(blankPage);
     }
-
 }

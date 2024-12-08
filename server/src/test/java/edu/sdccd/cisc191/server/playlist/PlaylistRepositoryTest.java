@@ -178,5 +178,4 @@ public class PlaylistRepositoryTest {
 
         assertEquals(1, playlist.getSongsArray().length);
     }
-
 }

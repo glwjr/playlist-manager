@@ -92,5 +92,4 @@ public class PlaylistService {
                 .sorted((song1, song2) -> song1.getName().compareToIgnoreCase(song2.getName()))
                 .collect(Collectors.toList());
     }
-
 }

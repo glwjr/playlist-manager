@@ -15,9 +15,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -59,8 +56,8 @@ public class SongControllerTest {
 
         List<SongInfo> baseSongs = songService.getAllSongs();
 
-        mockMvc.perform(get("/api/songs"))
-                .andExpect(status().isOk())
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/songs"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(baseSongs.get(0).getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3));
@@ -70,8 +67,8 @@ public class SongControllerTest {
     public void testGetSongById() throws Exception {
         List<SongInfo> baseSongs = songService.getAllSongs();
 
-        mockMvc.perform(get("/api/songs/" + baseSongs.get(0).getId()))
-                .andExpect(status().isOk())
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/songs/" + baseSongs.get(0).getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(baseSongs.get(0).getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(baseSongs.get(0).getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.artist").value(baseSongs.get(0).getArtist()))
@@ -87,7 +84,7 @@ public class SongControllerTest {
                         .post("/api/songs")
                         .content(asJsonString(payload))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
@@ -99,12 +96,12 @@ public class SongControllerTest {
                         .put("/api/songs/{id}", song.getId())
                         .content(asJsonString(payload))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
     public void testDeleteSong() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/songs/{id}", 1))
-                .andExpect(status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }
