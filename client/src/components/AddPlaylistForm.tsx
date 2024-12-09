@@ -5,21 +5,16 @@
 import React, {useState} from "react";
 import {Button, Paper, TextField, Typography} from "@mui/material";
 import {useRouter} from "next/navigation";
-import Song from "../../../common/Song";
 
-export default function AddSongForm() {
+export default function AddPlaylistForm() {
   const router = useRouter();
-  const [song, setSong] = useState<Song>({
-    name: "",
-    artist: "",
-    genre: "",
-  });
+  const [playlist, setPlaylist] = useState({name: ""});
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
-    setSong((prevSong) => ({
-      ...prevSong,
+    setPlaylist((prevPlaylist) => ({
+      ...prevPlaylist,
       [name]: value,
     }));
   };
@@ -29,16 +24,16 @@ export default function AddSongForm() {
     setError(null);
 
     try {
-      await fetch("http://localhost:8080/api/songs", {
+      await fetch("http://localhost:8080/api/playlists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(song),
+        body: JSON.stringify(playlist),
       });
 
-      setSong({name: "", artist: "", genre: ""});
-      router.push("/songs");
+      setPlaylist({name: ""});
+      router.push("/playlists");
     } catch (error: any) {
       setError(error.message || "An unknown error occurred.");
     }
@@ -58,28 +53,12 @@ export default function AddSongForm() {
       }}
     >
       <Typography variant="h6" textAlign="center">
-        Add a New Song
+        Add a New Playlist
       </Typography>
       <TextField
-        label="Song Name"
+        label="Playlist Name"
         name="name"
-        value={song.name}
-        onChange={handleChange}
-        required
-        fullWidth
-      />
-      <TextField
-        label="Artist"
-        name="artist"
-        value={song.artist}
-        onChange={handleChange}
-        required
-        fullWidth
-      />
-      <TextField
-        label="Genre"
-        name="genre"
-        value={song.genre}
+        value={playlist.name}
         onChange={handleChange}
         required
         fullWidth
@@ -87,7 +66,7 @@ export default function AddSongForm() {
       <Button type="submit" variant="contained" color="primary" fullWidth>
         Submit
       </Button>
-      <Button variant="outlined" fullWidth component="a" href="/songs">
+      <Button variant="outlined" fullWidth component="a" href="/playlists">
         Cancel
       </Button>
       {error && <Typography color="error.main" sx={{mx: "auto"}}>{error}</Typography>}

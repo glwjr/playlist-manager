@@ -1,10 +1,20 @@
-INSERT INTO SONG (name, artist, genre) VALUES ('Bohemian Rhapsody', 'Queen', 'Rock');
-INSERT INTO SONG (name, artist, genre) VALUES ('Imagine', 'John Lennon', 'Pop');
-INSERT INTO SONG (name, artist, genre) VALUES ('Hotel California', 'Eagles', 'Rock');
-INSERT INTO SONG (name, artist, genre) VALUES ('Hey Jude', 'The Beatles', 'Pop');
-INSERT INTO SONG (name, artist, genre) VALUES ('Like a Rolling Stone', 'Bob Dylan', 'Rock');
-INSERT INTO SONG (name, artist, genre) VALUES ('Smells Like Teen Spirit', 'Nirvana', 'Rock');
-INSERT INTO SONG (name, artist, genre) VALUES ('Billie Jean', 'Michael Jackson', 'Pop');
-INSERT INTO SONG (name, artist, genre) VALUES ('What a Wonderful World', 'Louis Armstrong', 'Jazz');
-INSERT INTO SONG (name, artist, genre) VALUES ('Stairway to Heaven', 'Led Zeppelin', 'Rock');
-INSERT INTO SONG (name, artist, genre) VALUES ('Let It Be', 'The Beatles', 'Pop');
+INSERT INTO SONG (name, artist, genre)
+VALUES ('Hotel California', 'Eagles', 'Rock'),
+       ('Hey Jude', 'The Beatles', 'Pop'),
+       ('Like a Rolling Stone', 'Bob Dylan', 'Rock'),
+       ('Smells Like Teen Spirit', 'Nirvana', 'Rock'),
+       ('Billie Jean', 'Michael Jackson', 'Pop'),
+       ('What a Wonderful World', 'Louis Armstrong', 'Jazz'),
+       ('Stairway to Heaven', 'Led Zeppelin', 'Rock'),
+       ('Let It Be', 'The Beatles', 'Pop');
+
+INSERT INTO PLAYLIST (name)
+VALUES ('Rock Playlist'),
+       ('Pop Playlist');
+
+INSERT INTO PLAYLIST_SONG (playlist_id, song_id)
+SELECT p.id, s.id
+FROM PLAYLIST p
+         JOIN SONG s ON
+    (p.name = 'Rock Playlist' AND s.genre = 'Rock') OR
+    (p.name = 'Pop Playlist' AND s.genre = 'Pop');

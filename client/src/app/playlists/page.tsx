@@ -6,7 +6,7 @@ import PlaylistsTable from "@/components/PlaylistsTable";
 
 async function fetchPlaylists() {
   try {
-    const data = await fetch("http://localhost:8080/api/songs");
+    const data = await fetch("http://localhost:8080/api/playlists");
     return await data.json();
   } catch (error) {
     console.error(error);
@@ -15,14 +15,21 @@ async function fetchPlaylists() {
 }
 
 export default async function PlaylistsPage() {
-  // const playlists = await fetchPlaylists();
-  const playlists = [];
+  const playlists = await fetchPlaylists();
 
   return (
     <Box>
-      <Typography variant="h5">Song Catalog</Typography>
-      <Button variant="contained" component="a" href="/songs/add" startIcon={<AddIcon />} sx={{ my: 2 }}>Add Song</Button>
-      <PlaylistsTable />
+      <Typography variant="h5">Playlists</Typography>
+      <Button
+        variant="contained"
+        component="a"
+        href="/playlists/add"
+        startIcon={<AddIcon/>}
+        sx={{my: 2}}
+      >
+        Create Playlist
+      </Button>
+      <PlaylistsTable playlists={playlists}/>
     </Box>
   );
 }
