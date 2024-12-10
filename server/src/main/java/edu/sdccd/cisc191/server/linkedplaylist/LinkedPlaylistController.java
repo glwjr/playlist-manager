@@ -77,6 +77,12 @@ public class LinkedPlaylistController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/populate")
+    public ResponseEntity<Void> populatePlaylist() {
+        linkedPlaylistService.populatePlaylist();
+        return ResponseEntity.noContent().build();
+    }
+
     @ExceptionHandler(SongNotFoundException.class)
     ResponseEntity<Void> handle(SongNotFoundException e) {
         return ResponseEntity.notFound().build();

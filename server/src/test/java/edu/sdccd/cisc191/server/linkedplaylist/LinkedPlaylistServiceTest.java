@@ -177,4 +177,12 @@ public class LinkedPlaylistServiceTest {
         assertNull(linkedPlaylistService.playNextSong());
         assertNull(linkedPlaylistService.playPreviousSong());
     }
+
+    @Test
+    public void testPopulatePlaylist() {
+        linkedPlaylistService.populatePlaylist();
+
+        assertEquals(3, linkedPlaylistService.getAllSongs().size());
+        assertEquals(song1.getId(), linkedPlaylistService.getCurrentSong().getId());
+    }
 }

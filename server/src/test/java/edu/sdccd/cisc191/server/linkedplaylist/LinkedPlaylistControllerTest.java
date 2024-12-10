@@ -195,4 +195,15 @@ public class LinkedPlaylistControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(songB.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].id").value(songC.getId()));
     }
+
+    @Test
+    public void testPopulatePlaylist() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/linked-playlist/populate"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/linked-playlist"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(song1.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(song2.getId()));
+    }
 }

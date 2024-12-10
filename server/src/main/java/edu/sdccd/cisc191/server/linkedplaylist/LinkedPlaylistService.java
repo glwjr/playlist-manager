@@ -57,4 +57,12 @@ public class LinkedPlaylistService {
     public void clearPlaylist() {
         linkedPlaylist.clear();
     }
+
+    public void populatePlaylist() {
+        List<Song> songs = songRepository.findAll();
+        linkedPlaylist.clear();
+        for (Song song : songs) {
+            linkedPlaylist.addSong(song);
+        }
+    }
 }
